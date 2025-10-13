@@ -1,0 +1,27 @@
+*&---------------------------------------------------------------------*
+*& INCLUDE Z_CUST_CREDIT_TOP
+*&---------------------------------------------------------------------*
+*& Purpose: Contains all global data declarations.
+*& Topics Used: DATA TYPES, STRUCTURES, INTERNAL TABLES
+*&---------------------------------------------------------------------*
+
+* 1. Structure Definition (TYPES)
+* Combines  fields from KNA1 and KNB1
+
+TYPES: BEGIN OF ty_cust_data,
+         kunnr TYPE kna1-kunnr,  " Customer Number
+         name1 TYPE kna1-name1,  " Customer Name
+         ort01 TYPE kna1-ort01,  " City
+         land1 TYPE kna1-land1,  " Country
+         bukrs TYPE knb1-bukrs,  " Company Code
+         klimg TYPE knb1-klimg,  " Credit Limit 
+         kredit TYPE c LENGTH 20, " Custom field for Credit Status
+       END OF ty_cust_data.
+
+* 2. Internal Table and Work Area Declarations (DATA)
+
+DATA: gt_cust_data TYPE STANDARD TABLE OF ty_cust_data,  " Internal Table to hold final data
+      gs_cust_data TYPE ty_cust_data,                    " Work Area (Structure) for processing
+
+      gs_layout     TYPE slis_layout_alv.               " Structure for ALV Layout control
+DATA: gv_repid TYPE sy-repid.                           " Variable for program name
