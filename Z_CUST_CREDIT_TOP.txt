@@ -17,3 +17,4 @@ TYPES: BEGIN OF ty_cust_data,     "structure name
 
 DATA: it_cust_data TYPE TABLE OF ty_cust_data.
       wa_cust_data TYPE ty_cust_data.
+
