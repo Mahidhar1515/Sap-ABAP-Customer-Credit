@@ -1,0 +1,70 @@
+*---------------------------------------------------------------------*
+* INCLUDE Z_CUST_CREDIT_FORM
+*---------------------------------------------------------------------*
+
+*---------------------------------------------------------------------*
+* Subroutine 1: Fetch and Process Data
+*---------------------------------------------------------------------*
+FORM fetch_customer_data.
+
+  SELECT a~kunnr
+         a~name1
+         a~ort01
+         a~land1
+         b~bukrs
+         b~klimg
+    INTO CORRESPONDING FIELDS OF TABLE it_cust_data
+    FROM kna1 AS a
+    INNER JOIN knb1 AS b
+      ON a~kunnr = b~kunnr
+    WHERE b~bukrs = @p_bukrs
+      AND a~kunnr IN @s_kunnr.
+
+  IF sy-subrc <> 0.
+    WRITE: / 'No Customer Data found matching the selection criteria.'.
+    EXIT.
+  ENDIF.
+
+  LOOP AT it_cust_data INTO wa_cust_data.
+
+    IF wa_cust_data-klimg > 100000.
+      wa_cust_data-kredit = 'High Credit Risk'.
+    ELSEIF wa_cust_data-klimg > 50000.
+      wa_cust_data-kredit = 'Standard Credit'.
+    ELSE.
+      wa_cust_data-kredit = 'Low Credit Limit'.
+    ENDIF.
+
+    MODIFY it_cust_data FROM wa_cust_data.
+  ENDLOOP.
+
+ENDFORM. " fetch_customer_data
+
+
+*---------------------------------------------------------------------*
+* Subroutine 2: Display Data (Using WRITE)
+*---------------------------------------------------------------------*
+FORM display_customer_data.
+
+  IF it_cust_data IS INITIAL.
+    WRITE: / 'No Customer Data found.'.
+    EXIT.
+  ENDIF.
+
+  " Header
+  WRITE: / 'CustNo', 15 'Name', 40 'City', 60 'Country',
+           75 'Company', 90 'CreditLimit', 110 'CreditStatus'.
+  ULINE.
+
+  " Output
+  LOOP AT it_cust_data INTO wa_cust_data.
+    WRITE: / wa_cust_data-kunnr UNDER 'CustNo',
+             wa_cust_data-name1 UNDER 'Name',
+             wa_cust_data-ort01 UNDER 'City',
+             wa_cust_data-land1 UNDER 'Country',
+             wa_cust_data-bukrs UNDER 'Company',
+             wa_cust_data-klimg UNDER 'CreditLimit',
+             wa_cust_data-kredit UNDER 'CreditStatus'.
+  ENDLOOP.
+
+ENDFORM. " display_customer_alv
