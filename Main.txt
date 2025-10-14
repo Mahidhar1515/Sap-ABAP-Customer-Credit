@@ -1,32 +1,28 @@
-*&---------------------------------------------------------------------*
-*& Report Z_CUST_CREDIT
-*&---------------------------------------------------------------------*
+REPORT Z_CUST_CREDIT.
 
-INCLUDE Z_CUST_CREDIT_TOP.  " Global Data Definitions
-INCLUDE Z_CUST_CREDIT_FORM. " Subroutines for Logic
+INCLUDE Z_CUST_CREDIT_TOP.   " Global Data Definitions
+INCLUDE Z_CUST_CREDIT_FORM.  " Subroutines for Logic
 
-*----------------------------------------------------------------------*
-* 2. Selection Screen (PARAMETERS & SELECT-OPTIONS)
-*----------------------------------------------------------------------*
 
+*---------------------------------------------------------------------*
+* 2. Selection Screen
+*---------------------------------------------------------------------*
 SELECTION-SCREEN BEGIN OF BLOCK s1 WITH FRAME TITLE TEXT-s01.
-  * Parameter: Filter by a single Company Code (MANDATORY for KNB1 data)
-  PARAMETERS: p_bukrs TYPE knb1-bukrs OBLIGATORY.
 
-  * Select-Options: Filter by Customer Number Range
-  SELECT-OPTIONS: s_kunnr FOR kna1-kunnr.
+PARAMETERS: p_bukrs TYPE knb1-bukrs OBLIGATORY.  " Company Code (Mandatory)
+SELECT-OPTIONS: s_kunnr FOR kna1-kunnr.          " Customer Number Range
+
 SELECTION-SCREEN END OF BLOCK s1.
 
-*----------------------------------------------------------------------*
+
+*---------------------------------------------------------------------*
 * 3. Program Execution Flow
-*----------------------------------------------------------------------*
+*---------------------------------------------------------------------*
 START-OF-SELECTION.
-  * Call subroutine to perform database fetch and data processing
-  PERFORM fetch_customer_data.
 
-  * Call subroutine to display the results using ALV
-  PERFORM display_customer_alv.
+  PERFORM fetch_customer_data.   " Fetch & process data
+  PERFORM display_customer_data.  " Display results (WRITE output)
 
-*----------------------------------------------------------------------*
+*---------------------------------------------------------------------*
 * End of Main Program
-*----------------------------------------------------------------------*
+*---------------------------------------------------------------------*
