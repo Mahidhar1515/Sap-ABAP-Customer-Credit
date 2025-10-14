@@ -1,0 +1,19 @@
+*---------------------------------------------------------------------*
+* INCLUDE Z_CUST_CREDIT_TOP
+*---------------------------------------------------------------------*
+
+* 1. Structure Definition (TYPES)
+TYPES: BEGIN OF ty_cust_data,     "structure name
+         kunnr  TYPE kna1-kunnr,  " Customer Number
+         name1  TYPE kna1-name1,  " Customer Name
+         ort01  TYPE kna1-ort01,  " City
+         land1  TYPE kna1-land1,  " Country
+         bukrs  TYPE knb1-bukrs,  " Company Code
+         klimg  TYPE knb1-klimg,  " Credit Limit
+         kredit TYPE c LENGTH 20, " Custom field for Credit Status
+       END OF ty_cust_data.
+
+* 2. Internal Table and Work Area
+
+DATA: it_cust_data TYPE TABLE OF ty_cust_data.
+      wa_cust_data TYPE ty_cust_data.
