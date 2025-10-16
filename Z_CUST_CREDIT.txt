@@ -1,29 +1,21 @@
-REPORT Z_CUST_CREDIT.
+REPORT ZMVM_CUST_CREDIT.
 
-INCLUDE Z_CUST_CREDIT_TOP.   " Global Data Definitions
-INCLUDE Z_CUST_CREDIT_FORM.  " Subroutines for Logic
+INCLUDE ZMVM_CUST_CREDIT_TOP.   " Global Data Definitions
 
 
-*---------------------------------------------------------------------*
-* 2. Selection Screen
-*---------------------------------------------------------------------*
+*----------------------------------------------------------------------*
+* Selection Screen
+*----------------------------------------------------------------------*
 SELECTION-SCREEN BEGIN OF BLOCK s1 WITH FRAME TITLE TEXT-s01.
-
-PARAMETERS: p_bukrs TYPE knb1-bukrs OBLIGATORY.  " Company Code (Mandatory)
-SELECT-OPTIONS: s_kunnr FOR kna1-kunnr.          " Customer Number Range
-
+  PARAMETERS: p_bukrs TYPE knb1-bukrs .   " Company Code (Mandatory)
+  SELECT-OPTIONS: s_kunnr FOR kna1-kunnr.           " Customer Number Range
 SELECTION-SCREEN END OF BLOCK s1.
 
+INCLUDE Zmvm_CUST_CREDIT_FORM. " Subroutines for Logic
 
-*---------------------------------------------------------------------*
-* 3. Program Execution Flow
-*---------------------------------------------------------------------*
+*----------------------------------------------------------------------*
+* Program Execution Flow
+*----------------------------------------------------------------------*
 START-OF-SELECTION.
-
-  PERFORM fetch_customer_data.   " Fetch & process data
-  PERFORM display_customer_data.  " Display results (WRITE output)
-
-*---------------------------------------------------------------------*
-* End of Main Program
-*---------------------------------------------------------------------*
-
+  PERFORM fetch_customer_data USING p_bukrs.     " Fetch & process data
+  PERFORM display_customer_data.   " Display results
